@@ -1,18 +1,18 @@
-import type { MetaFunction } from "@remix-run/node";
 import {
   Links,
-  LiveReload,
   Meta,
   NavLink,
   Scripts,
   ScrollRestoration,
+  useLocation,
+  useOutlet,
 } from "@remix-run/react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
-import { useLocation, useOutlet } from "react-router-dom";
 
 export default function App() {
   const outlet = useOutlet();
+  const location = useLocation();
+
   return (
     <html lang="en">
       <head>
@@ -28,22 +28,12 @@ export default function App() {
           </nav>
         </header>
         <div className="mx-auto grid min-h-screen place-items-center">
-          <AnimatePresence mode="wait">
-            <motion.main
-              key={useLocation().pathname}
-              transition={{ duration: 3 }}
-              initial={{ translateX: "-100vw" }}
-              animate={{ translateX: "0vw" }}
-              exit={{ translateX: "100vw" }}
-            >
-              {outlet}
-            </motion.main>
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div key={location.pathname}>{outlet}</motion.div>
           </AnimatePresence>
         </div>
-
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
       </body>
     </html>
   );
